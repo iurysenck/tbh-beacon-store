@@ -1,0 +1,29 @@
+name: Mod problem
+description: Something's wrong with a mod listed in this store (not its in-game behavior)
+title: "[Mod]: "
+labels: ["mod-listing"]
+body:
+  - type: input
+    id: mod-id
+    attributes:
+      label: Mod id
+      description: The "id" field from its mods/<id>.json manifest.
+    validations:
+      required: true
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What's wrong?
+      description: >
+        E.g. manifest points at a commit that no longer builds, pinnedCommit doesn't match what
+        was reviewed, wrong repoUrl, etc. For a bug in the mod's actual in-game behavior, report
+        it on that mod's own repo instead -- this repo only tracks the listing.
+    validations:
+      required: true
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Checklist
+      options:
+        - label: This is about the listing itself, not the mod's in-game behavior.
+          required: true

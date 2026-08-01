@@ -1,0 +1,15 @@
+{
+  "id": "chestmod",
+  "name": "Beacon Chest",
+  "description": "Standalone chest-opening automation for TaskBar Hero.",
+  "author": "Iury Senck",
+  "repoUrl": "https://github.com/iurysenck/tbh-beacon-modkit",
+  "pinnedCommit": "466730287e89795d1b2e075afe57e299cb0752d7",
+  "entryProject": "chestmod/ChestMod.csproj",
+  "assemblyName": "ChestMod.dll",
+  "category": "automation",
+  "injectable": true,
+  "sdkVersion": "1.0.0",
+  "license": "AGPL-3.0-only",
+  "homepage": "https://github.com/iurysenck/tbh-beacon-modkit"
+}

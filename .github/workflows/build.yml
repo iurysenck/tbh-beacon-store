@@ -1,0 +1,29 @@
+# Rebuilds every mod straight from its pinned commit and hashes the result -- see
+# scripts/build_from_source.py's docstring for why this step exists at all.
+#
+# runs-on: self-hosted, NOT ubuntu-latest. Every mod's .csproj references the game's own
+# BepInEx/interop/*.dll (Assembly-CSharp.dll, UnityEngine.*.dll, ...) as build-time dependencies --
+# proprietary game binaries that can't be checked into this repo or fetched by a GitHub-hosted
+# runner. This job only works on a runner that already has TaskBar Hero + BepInEx installed
+# locally (the maintainer's own machine, registered as a self-hosted runner). Until one is
+# registered, run scripts/build_from_source.py locally instead and attach the resulting
+# dist/<id>/<assemblyName> + printed hash to the release by hand.
+name: Build from source
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - "mods/**"
+
+jobs:
+  build:
+    runs-on: self-hosted
+    steps:
+      - uses: actions/checkout@v4
+      - run: python scripts/build_from_source.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: mod-builds
+          path: dist/

@@ -1,0 +1,81 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/iurysenck/tbh-beacon-store/schema/manifest.schema.json",
+  "title": "Beacon mod manifest",
+  "description": "One JSON file per mod in mods/<id>.json. CI validates every manifest against this schema on every PR, then rebuilds the pinned commit from source and hashes the result -- nothing here is trusted at face value, it's just the pointer CI uses to go get and verify the real thing.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "name",
+    "description",
+    "author",
+    "repoUrl",
+    "pinnedCommit",
+    "entryProject",
+    "assemblyName",
+    "category",
+    "injectable",
+    "sdkVersion",
+    "license"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9_]*$",
+      "description": "Unique, lowercase, matches the manifest filename (mods/<id>.json) and the mod's own PLUGIN_INFO id."
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 60
+    },
+    "description": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 280
+    },
+    "author": {
+      "type": "string",
+      "minLength": 1
+    },
+    "repoUrl": {
+      "type": "string",
+      "format": "uri",
+      "pattern": "^https://"
+    },
+    "pinnedCommit": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{40}$",
+      "description": "Full 40-char commit SHA. CI clones exactly this commit, never a branch or tag -- a moving ref would let the source change after review without anyone re-reviewing it."
+    },
+    "entryProject": {
+      "type": "string",
+      "description": "Path to the .csproj CI builds, relative to the repo root at repoUrl."
+    },
+    "assemblyName": {
+      "type": "string",
+      "description": "Expected output DLL file name, used to verify the build produced what this manifest claims it does."
+    },
+    "category": {
+      "type": "string",
+      "enum": ["automation", "live-data", "ui-card", "other"]
+    },
+    "injectable": {
+      "type": "boolean",
+      "description": "Whether this mod requires the BepInEx bridge (see tbh-beacon-modkit). false means it's a pure Beacon-side plugin with no game-process injection at all."
+    },
+    "sdkVersion": {
+      "type": "string",
+      "description": "Minimum BeaconModKit SDK version this mod was built against, e.g. \"1.0.0\"."
+    },
+    "license": {
+      "type": "string",
+      "minLength": 1
+    },
+    "homepage": {
+      "type": "string",
+      "format": "uri"
+    }
+  }
+}
