@@ -13,7 +13,7 @@ name: Build from source
 on:
   workflow_dispatch:
   push:
-    branches: [main]
+    branches: [master]
     paths:
       - "mods/**"
 

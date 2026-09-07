@@ -31,9 +31,31 @@
       "maxLength": 60
     },
     "description": {
-      "type": "string",
-      "minLength": 1,
-      "maxLength": 280
+      "type": "object",
+      "description": "Localized short description, one entry per supported language. The store page and the in-app store are user-facing material, and this project requires Portuguese, English and Spanish for all user-facing text, so all three are required here. `name` stays a plain string on purpose: mod names are proper nouns (\"Beacon Chest\") and are not translated.",
+      "additionalProperties": false,
+      "required": [
+        "pt",
+        "en",
+        "es"
+      ],
+      "properties": {
+        "pt": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 280
+        },
+        "en": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 280
+        },
+        "es": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 280
+        }
+      }
     },
     "author": {
       "type": "string",
@@ -59,7 +81,12 @@
     },
     "category": {
       "type": "string",
-      "enum": ["automation", "live-data", "ui-card", "other"]
+      "enum": [
+        "automation",
+        "live-data",
+        "ui-card",
+        "other"
+      ]
     },
     "injectable": {
       "type": "boolean",

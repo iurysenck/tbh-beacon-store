@@ -1,0 +1,19 @@
+{
+  "id": "portal",
+  "name": "Beacon Portal",
+  "description": {
+    "pt": "Automação de portal para TaskBar Hero.",
+    "en": "Portal automation for TaskBar Hero.",
+    "es": "Automatización de portal para TaskBar Hero."
+  },
+  "author": "Iury Senck",
+  "repoUrl": "https://github.com/iurysenck/tbh-beacon-modkit",
+  "pinnedCommit": "ba5b1d1c4aabfd2e5dc5af56a7cf090c985692c2",
+  "entryProject": "portal/PortalMod.csproj",
+  "assemblyName": "PortalMod.dll",
+  "category": "automation",
+  "injectable": true,
+  "sdkVersion": "1.0.0",
+  "license": "AGPL-3.0-only",
+  "homepage": "https://github.com/iurysenck/tbh-beacon-modkit"
+}

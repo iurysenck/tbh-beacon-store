@@ -28,7 +28,12 @@ this repo only tracks the listing itself.
 ## Code style
 
 - One manifest, one PR — don't bundle unrelated mod submissions together.
-- Keep `description` short (it's shown in a list, not a detail page).
+- `description` takes all three languages this project supports: `pt`, `en` and `es`. The store
+  page and the in-app store are user-facing, and every user-facing string here ships translated.
+  The validator rejects a manifest missing any of them.
+- Keep each translation short (it's shown in a list, not a detail page). 280 characters is the
+  hard cap the schema enforces, but aim for one sentence.
+- `name` stays a single untranslated string: mod names are proper nouns ("Beacon Chest").
 
 By submitting a PR you agree the manifest/schema/CI content you contribute here is licensed under
 this project's [AGPL-3.0](LICENSE).

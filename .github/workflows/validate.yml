@@ -7,7 +7,7 @@ on:
       - "schema/**"
       - "scripts/validate_manifests.py"
   push:
-    branches: [main]
+    branches: [master]
     paths:
       - "mods/**"
       - "schema/**"

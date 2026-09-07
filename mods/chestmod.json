@@ -1,10 +1,14 @@
 {
   "id": "chestmod",
   "name": "Beacon Chest",
-  "description": "Standalone chest-opening automation for TaskBar Hero.",
+  "description": {
+    "pt": "Automação independente de abertura de baús para TaskBar Hero.",
+    "en": "Standalone chest-opening automation for TaskBar Hero.",
+    "es": "Automatización independiente de apertura de cofres para TaskBar Hero."
+  },
   "author": "Iury Senck",
   "repoUrl": "https://github.com/iurysenck/tbh-beacon-modkit",
-  "pinnedCommit": "466730287e89795d1b2e075afe57e299cb0752d7",
+  "pinnedCommit": "ba5b1d1c4aabfd2e5dc5af56a7cf090c985692c2",
   "entryProject": "chestmod/ChestMod.csproj",
   "assemblyName": "ChestMod.dll",
   "category": "automation",

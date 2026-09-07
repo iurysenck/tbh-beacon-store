@@ -18,6 +18,20 @@ repo never hosts mod source or built DLLs directly, it only indexes them.
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for the full submission process.
 
+## Disclaimer
+
+Beacon is an unofficial companion app, not affiliated with the game's developers.
+Task Bar Hero, its names, trademarks and assets belong to TesseractStudio / Nugem Studio.
+This project does not redistribute game assets: they are read from your own installation.
+Game privacy policy: https://taskbarhero.wiki/privacy
+
+Beacon e um aplicativo companion nao oficial, sem vinculo com os desenvolvedores do jogo.
+Task Bar Hero, seus nomes, marcas e assets pertencem a TesseractStudio / Nugem Studio.
+Este projeto nao redistribui assets do jogo: eles sao lidos da sua propria instalacao.
+Politica de privacidade do jogo: https://taskbarhero.wiki/privacy
+
+This repository stores manifests only. It collects no data, sets no cookies and runs no analytics.
+
 ## License
 
 AGPL-3.0-only — see [LICENSE](LICENSE). Note this covers the manifests/schema/CI in *this* repo;

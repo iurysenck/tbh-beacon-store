@@ -1,0 +1,19 @@
+{
+  "id": "formation",
+  "name": "Beacon Formation",
+  "description": {
+    "pt": "Formação de heróis e pets: lê o elenco e organiza os slots do grupo pelo Beacon.",
+    "en": "Hero and pet formation: read the roster and arrange party slots from Beacon.",
+    "es": "Formación de héroes y mascotas: lee la lista y organiza los espacios del grupo desde Beacon."
+  },
+  "author": "Iury Senck",
+  "repoUrl": "https://github.com/iurysenck/tbh-beacon-modkit",
+  "pinnedCommit": "ba5b1d1c4aabfd2e5dc5af56a7cf090c985692c2",
+  "entryProject": "formation/FormationMod.csproj",
+  "assemblyName": "FormationMod.dll",
+  "category": "automation",
+  "injectable": true,
+  "sdkVersion": "1.0.0",
+  "license": "AGPL-3.0-only",
+  "homepage": "https://github.com/iurysenck/tbh-beacon-modkit"
+}

@@ -1,0 +1,19 @@
+{
+  "id": "livedata",
+  "name": "Beacon Live Data",
+  "description": {
+    "pt": "Exportação ao vivo somente leitura: envia ao Beacon a fase atual e os drops dela enquanto o jogo roda.",
+    "en": "Read-only live stage export: streams the current stage and its drop data to Beacon while the game runs.",
+    "es": "Exportación en vivo de solo lectura: envía a Beacon la fase actual y sus drops mientras el juego corre."
+  },
+  "author": "Iury Senck",
+  "repoUrl": "https://github.com/iurysenck/tbh-beacon-modkit",
+  "pinnedCommit": "ba5b1d1c4aabfd2e5dc5af56a7cf090c985692c2",
+  "entryProject": "livedata/TbhLiveData.csproj",
+  "assemblyName": "TbhLiveData.dll",
+  "category": "live-data",
+  "injectable": true,
+  "sdkVersion": "1.0.0",
+  "license": "AGPL-3.0-only",
+  "homepage": "https://github.com/iurysenck/tbh-beacon-modkit"
+}
