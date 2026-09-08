@@ -103,6 +103,20 @@
     "homepage": {
       "type": "string",
       "format": "uri"
+    },
+    "minBeaconVersion": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+      "description": "Oldest Beacon version this mod is known to work on, as MAJOR.MINOR.PATCH. Beacon compares it against its own version (src-tauri/tauri.conf.json) and blocks the install with a clear message instead of letting the mod fail at runtime. Optional: leave it out when the mod does not depend on anything version-specific."
+    },
+    "requires": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^[a-z][a-z0-9_]*$"
+      },
+      "uniqueItems": true,
+      "description": "Ids of other mods that must be installed first. No shipped mod uses this today: every mod talks to Beacon directly over IPC and none depends on another (a deliberate decision, see the modkit's own specs). The field exists so a future mod that consumes data another mod exposes can declare it, instead of failing in a way the user cannot diagnose."
     }
   }
 }
