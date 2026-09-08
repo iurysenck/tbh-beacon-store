@@ -2,9 +2,9 @@
   "id": "portal",
   "name": "Beacon Portal",
   "description": {
-    "pt": "Automação de portal para TaskBar Hero.",
-    "en": "Portal automation for TaskBar Hero.",
-    "es": "Automatización de portal para TaskBar Hero."
+    "pt": "Navegue pelas fases do jogo pelo Beacon: escolha ato, dificuldade e fase, e o herói caminha até lá. Inclui alternar a repetição automática.",
+    "en": "Browse the game's stages from Beacon: pick act, difficulty and stage, and the hero walks there. Includes toggling auto retry.",
+    "es": "Navega por las fases del juego desde Beacon: elige acto, dificultad y fase, y el héroe camina hasta allí. Incluye alternar el reintento automático."
   },
   "author": "Iury Senck",
   "repoUrl": "https://github.com/iurysenck/tbh-beacon-modkit",

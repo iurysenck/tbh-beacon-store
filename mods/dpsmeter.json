@@ -2,9 +2,9 @@
   "id": "dpsmeter",
   "name": "Beacon DPS Meter",
   "description": {
-    "pt": "Medição de dano por segundo ao vivo para TaskBar Hero.",
-    "en": "Live damage-per-second measurement for TaskBar Hero.",
-    "es": "Medición de daño por segundo en vivo para TaskBar Hero."
+    "pt": "Medição de dano ao vivo: DPS atual, dano e DPS da luta em andamento, e dano total da sessão. Somente leitura.",
+    "en": "Live damage measurement: current DPS, damage and DPS for the fight in progress, and total session damage. Read-only.",
+    "es": "Medición de daño en vivo: DPS actual, daño y DPS del combate en curso, y daño total de la sesión. Solo lectura."
   },
   "author": "Iury Senck",
   "repoUrl": "https://github.com/iurysenck/tbh-beacon-modkit",
