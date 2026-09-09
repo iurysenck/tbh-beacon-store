@@ -1,0 +1,213 @@
+{
+  "mods": [
+    {
+      "assemblyName": "AlchemyMod.dll",
+      "author": "Iury Senck",
+      "category": "automation",
+      "description": {
+        "en": "Alchemy automation for TaskBar Hero.",
+        "es": "Automatización de alquimia para TaskBar Hero.",
+        "pt": "Automação de alquimia para TaskBar Hero."
+      },
+      "entryProject": "alchemy/AlchemyMod.csproj",
+      "homepage": "https://github.com/iurysenck/tbh-beacon-modkit",
+      "id": "alchemy",
+      "injectable": true,
+      "license": "AGPL-3.0-only",
+      "name": "Beacon Alchemy",
+      "pinnedCommit": "ba5b1d1c4aabfd2e5dc5af56a7cf090c985692c2",
+      "repoUrl": "https://github.com/iurysenck/tbh-beacon-modkit",
+      "sdkVersion": "1.0.0"
+    },
+    {
+      "assemblyName": "ChestMod.dll",
+      "author": "Iury Senck",
+      "category": "automation",
+      "description": {
+        "en": "Standalone chest-opening automation for TaskBar Hero.",
+        "es": "Automatización independiente de apertura de cofres para TaskBar Hero.",
+        "pt": "Automação independente de abertura de baús para TaskBar Hero."
+      },
+      "entryProject": "chestmod/ChestMod.csproj",
+      "homepage": "https://github.com/iurysenck/tbh-beacon-modkit",
+      "id": "chestmod",
+      "injectable": true,
+      "license": "AGPL-3.0-only",
+      "name": "Beacon Chest",
+      "pinnedCommit": "ba5b1d1c4aabfd2e5dc5af56a7cf090c985692c2",
+      "repoUrl": "https://github.com/iurysenck/tbh-beacon-modkit",
+      "sdkVersion": "1.0.0"
+    },
+    {
+      "assemblyName": "DpsMeter.dll",
+      "author": "Iury Senck",
+      "category": "live-data",
+      "description": {
+        "en": "Live damage measurement: current DPS, damage and DPS for the fight in progress, and total session damage. Read-only.",
+        "es": "Medición de daño en vivo: DPS actual, daño y DPS del combate en curso, y daño total de la sesión. Solo lectura.",
+        "pt": "Medição de dano ao vivo: DPS atual, dano e DPS da luta em andamento, e dano total da sessão. Somente leitura."
+      },
+      "entryProject": "dpsmeter/DpsMeter.csproj",
+      "homepage": "https://github.com/iurysenck/tbh-beacon-modkit",
+      "id": "dpsmeter",
+      "injectable": true,
+      "license": "AGPL-3.0-only",
+      "name": "Beacon DPS Meter",
+      "pinnedCommit": "ba5b1d1c4aabfd2e5dc5af56a7cf090c985692c2",
+      "repoUrl": "https://github.com/iurysenck/tbh-beacon-modkit",
+      "sdkVersion": "1.0.0"
+    },
+    {
+      "assemblyName": "FormationMod.dll",
+      "author": "Iury Senck",
+      "category": "automation",
+      "description": {
+        "en": "Hero and pet formation: read the roster and arrange party slots from Beacon.",
+        "es": "Formación de héroes y mascotas: lee la lista y organiza los espacios del grupo desde Beacon.",
+        "pt": "Formação de heróis e pets: lê o elenco e organiza os slots do grupo pelo Beacon."
+      },
+      "entryProject": "formation/FormationMod.csproj",
+      "homepage": "https://github.com/iurysenck/tbh-beacon-modkit",
+      "id": "formation",
+      "injectable": true,
+      "license": "AGPL-3.0-only",
+      "name": "Beacon Formation",
+      "pinnedCommit": "ba5b1d1c4aabfd2e5dc5af56a7cf090c985692c2",
+      "repoUrl": "https://github.com/iurysenck/tbh-beacon-modkit",
+      "sdkVersion": "1.0.0"
+    },
+    {
+      "assemblyName": "InventoryOpsMod.dll",
+      "author": "Iury Senck",
+      "category": "automation",
+      "description": {
+        "en": "Inventory operations: sort items, move them between inventory and stash, list them on the market and trade them in.",
+        "es": "Operaciones de inventario: ordenar objetos, moverlos entre inventario y baúl, listarlos en el mercado e intercambiarlos.",
+        "pt": "Operações de inventário: ordenar itens, mover entre inventário e baú, listar no mercado e trocar."
+      },
+      "entryProject": "inventoryops/InventoryOpsMod.csproj",
+      "homepage": "https://github.com/iurysenck/tbh-beacon-modkit",
+      "id": "inventoryops",
+      "injectable": true,
+      "license": "AGPL-3.0-only",
+      "name": "Beacon Inventory Ops",
+      "pinnedCommit": "ba5b1d1c4aabfd2e5dc5af56a7cf090c985692c2",
+      "repoUrl": "https://github.com/iurysenck/tbh-beacon-modkit",
+      "sdkVersion": "1.0.0"
+    },
+    {
+      "assemblyName": "TbhLiveData.dll",
+      "author": "Iury Senck",
+      "category": "live-data",
+      "description": {
+        "en": "Read-only live stage export: streams the current stage and its drop data to Beacon while the game runs.",
+        "es": "Exportación en vivo de solo lectura: envía a Beacon la fase actual y sus drops mientras el juego corre.",
+        "pt": "Exportação ao vivo somente leitura: envia ao Beacon a fase atual e os drops dela enquanto o jogo roda."
+      },
+      "entryProject": "livedata/TbhLiveData.csproj",
+      "homepage": "https://github.com/iurysenck/tbh-beacon-modkit",
+      "id": "livedata",
+      "injectable": true,
+      "license": "AGPL-3.0-only",
+      "name": "Beacon Live Data",
+      "pinnedCommit": "ba5b1d1c4aabfd2e5dc5af56a7cf090c985692c2",
+      "repoUrl": "https://github.com/iurysenck/tbh-beacon-modkit",
+      "sdkVersion": "1.0.0"
+    },
+    {
+      "assemblyName": "OfferingMod.dll",
+      "author": "Iury Senck",
+      "category": "automation",
+      "description": {
+        "en": "Offering automation for TaskBar Hero.",
+        "es": "Automatización de ofrendas para TaskBar Hero.",
+        "pt": "Automação de oferendas para TaskBar Hero."
+      },
+      "entryProject": "offering/OfferingMod.csproj",
+      "homepage": "https://github.com/iurysenck/tbh-beacon-modkit",
+      "id": "offering",
+      "injectable": true,
+      "license": "AGPL-3.0-only",
+      "name": "Beacon Offering",
+      "pinnedCommit": "ba5b1d1c4aabfd2e5dc5af56a7cf090c985692c2",
+      "repoUrl": "https://github.com/iurysenck/tbh-beacon-modkit",
+      "sdkVersion": "1.0.0"
+    },
+    {
+      "assemblyName": "PortalMod.dll",
+      "author": "Iury Senck",
+      "category": "automation",
+      "description": {
+        "en": "Browse the game's stages from Beacon: pick act, difficulty and stage, and the hero walks there. Includes toggling auto retry.",
+        "es": "Navega por las fases del juego desde Beacon: elige acto, dificultad y fase, y el héroe camina hasta allí. Incluye alternar el reintento automático.",
+        "pt": "Navegue pelas fases do jogo pelo Beacon: escolha ato, dificuldade e fase, e o herói caminha até lá. Inclui alternar a repetição automática."
+      },
+      "entryProject": "portal/PortalMod.csproj",
+      "homepage": "https://github.com/iurysenck/tbh-beacon-modkit",
+      "id": "portal",
+      "injectable": true,
+      "license": "AGPL-3.0-only",
+      "name": "Beacon Portal",
+      "pinnedCommit": "ba5b1d1c4aabfd2e5dc5af56a7cf090c985692c2",
+      "repoUrl": "https://github.com/iurysenck/tbh-beacon-modkit",
+      "sdkVersion": "1.0.0"
+    },
+    {
+      "assemblyName": "RuneMod.dll",
+      "author": "Iury Senck",
+      "category": "automation",
+      "description": {
+        "en": "Rune automation for TaskBar Hero.",
+        "es": "Automatización de runas para TaskBar Hero.",
+        "pt": "Automação de runas para TaskBar Hero."
+      },
+      "entryProject": "rune/RuneMod.csproj",
+      "homepage": "https://github.com/iurysenck/tbh-beacon-modkit",
+      "id": "rune",
+      "injectable": true,
+      "license": "AGPL-3.0-only",
+      "name": "Beacon Rune",
+      "pinnedCommit": "ba5b1d1c4aabfd2e5dc5af56a7cf090c985692c2",
+      "repoUrl": "https://github.com/iurysenck/tbh-beacon-modkit",
+      "sdkVersion": "1.0.0"
+    },
+    {
+      "assemblyName": "SoulstoneMod.dll",
+      "author": "Iury Senck",
+      "category": "automation",
+      "description": {
+        "en": "Soulstone automation for TaskBar Hero.",
+        "es": "Automatización de piedra de alma para TaskBar Hero.",
+        "pt": "Automação de pedra de alma para TaskBar Hero."
+      },
+      "entryProject": "soulstone/SoulstoneMod.csproj",
+      "homepage": "https://github.com/iurysenck/tbh-beacon-modkit",
+      "id": "soulstone",
+      "injectable": true,
+      "license": "AGPL-3.0-only",
+      "name": "Beacon Soulstone",
+      "pinnedCommit": "ba5b1d1c4aabfd2e5dc5af56a7cf090c985692c2",
+      "repoUrl": "https://github.com/iurysenck/tbh-beacon-modkit",
+      "sdkVersion": "1.0.0"
+    },
+    {
+      "assemblyName": "SynthesisMod.dll",
+      "author": "Iury Senck",
+      "category": "automation",
+      "description": {
+        "en": "Cube synthesis automation for TaskBar Hero.",
+        "es": "Automatización de síntesis de cubos para TaskBar Hero.",
+        "pt": "Automação de síntese de cubos para TaskBar Hero."
+      },
+      "entryProject": "synthesis/SynthesisMod.csproj",
+      "homepage": "https://github.com/iurysenck/tbh-beacon-modkit",
+      "id": "synthesis",
+      "injectable": true,
+      "license": "AGPL-3.0-only",
+      "name": "Beacon Synthesis",
+      "pinnedCommit": "ba5b1d1c4aabfd2e5dc5af56a7cf090c985692c2",
+      "repoUrl": "https://github.com/iurysenck/tbh-beacon-modkit",
+      "sdkVersion": "1.0.0"
+    }
+  ]
+}

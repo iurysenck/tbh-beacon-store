@@ -4,6 +4,13 @@ A community mod directory for [Beacon](https://github.com/iurysenck/tbh-beacon).
 here is a `mods/<id>.json` manifest pointing at a specific pinned commit in its own repo -- this
 repo never hosts mod source or built DLLs directly, it only indexes them.
 
+## Store page
+
+Browse the listed mods at **https://iurysenck.github.io/tbh-beacon-store/** (Portuguese, English
+and Spanish). The page is static: it reads `docs/catalog.json`, which `scripts/build_catalog.py`
+generates from these same `mods/*.json` manifests, so the web page, the store inside Beacon and
+this repository never disagree. `catalog.yml` regenerates it on every manifest change.
+
 ## How it works
 
 1. A mod author opens a PR adding `mods/<id>.json` (see `schema/manifest.schema.json`).

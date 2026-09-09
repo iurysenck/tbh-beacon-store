@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Beacon Store</title>
+<meta name="description" content="Diretório de mods do Beacon. Cada mod aponta para um commit fixado no repositório do próprio autor.">
+<meta name="color-scheme" content="dark">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230e0c0a'/%3E%3Cpath d='M16 6 L24 20 H8 Z' fill='%23d4a017'/%3E%3Ccircle cx='16' cy='24' r='2.5' fill='%23d4a017'/%3E%3C/svg%3E">
+<style>
+:root {
+  --bg: #0e0c0a;
+  --bg2: #141210;
+  --panel: #1c1914;
+  --line: #3a3228;
+  --line2: #2a251f;
+  --txt: #ddd5c4;
+  --mut: #948873;
+  --acc: #d4a017;
+  --acc2: #9ab8d8;
+  --ok: #4ecf7a;
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --maxw: 1080px;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--txt);
+  font-family: "Noto Sans", "Segoe UI", system-ui, -apple-system, sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Atmosfera: um brilho quente atrás do topo e uma trama fina de ruído sobre o fundo inteiro.
+   Ambos vivem em ::before/::after do body, fora do fluxo, para não custar layout. */
+body::before {
+  content: "";
+  position: fixed;
+  inset: -20% -20% auto -20%;
+  height: 70vh;
+  background: radial-gradient(60% 55% at 50% 0%, rgba(212, 160, 23, 0.13), transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)' opacity='0.35'/%3E%3C/svg%3E");
+  opacity: 0.035;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.shell { position: relative; z-index: 1; }
+
+a { color: inherit; }
+
+.wrap {
+  width: 100%;
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* ===== topo ===== */
+
+header.top {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: rgba(14, 12, 10, 0.82);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--line2);
+}
+
+.top-inner {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  min-height: 60px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  min-height: 40px;
+  gap: 10px;
+  text-decoration: none;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  margin-right: auto;
+}
+.brand svg { flex: none; }
+.brand span { font-size: 15px; }
+.brand b { color: var(--acc); font-weight: 700; }
+
+nav.links { display: flex; gap: 2px; }
+nav.links a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 40px;
+  padding: 0 12px;
+  border-radius: 8px;
+  font-size: 12.5px;
+  color: var(--mut);
+  text-decoration: none;
+  transition: color 150ms var(--ease), background-color 150ms var(--ease);
+}
+nav.links a:hover, nav.links a:focus-visible { color: var(--txt); background: var(--panel); }
+
+.langs {
+  display: flex;
+  gap: 2px;
+  padding: 3px;
+  border: 1px solid var(--line2);
+  border-radius: 10px;
+  background: var(--bg2);
+}
+.langs button {
+  min-height: 40px;
+  min-width: 40px;
+  padding: 0 8px;
+  border: 0;
+  border-radius: 7px;
+  background: transparent;
+  color: var(--mut);
+  font: inherit;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  transition: color 150ms var(--ease), background-color 150ms var(--ease);
+}
+.langs button:hover { color: var(--txt); }
+.langs button[aria-pressed="true"] { background: var(--acc); color: #17130a; }
+
+/* ===== hero ===== */
+
+.hero { padding: 84px 0 56px; }
+
+.hero .eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--acc);
+  margin: 0 0 18px;
+}
+.hero .eyebrow::before {
+  content: "";
+  width: 26px;
+  height: 1px;
+  background: var(--acc);
+  opacity: 0.6;
+}
+
+.hero h1 {
+  margin: 0;
+  font-size: clamp(38px, 8vw, 68px);
+  line-height: 1.02;
+  letter-spacing: -0.03em;
+  font-weight: 800;
+}
+.hero h1 em { font-style: normal; color: var(--acc); }
+
+.hero p.lead {
+  margin: 20px 0 0;
+  max-width: 54ch;
+  font-size: clamp(14px, 2.4vw, 16.5px);
+  color: var(--mut);
+}
+
+.hero-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 30px;
+}
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 40px;
+  padding: 0 14px;
+  border: 1px solid var(--line2);
+  border-radius: 999px;
+  background: var(--bg2);
+  font-size: 12px;
+  color: var(--mut);
+}
+.pill b { color: var(--txt); font-weight: 700; }
+.pill .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--ok); flex: none; }
+
+/* ===== seções ===== */
+
+section { padding: 52px 0; }
+
+.sec-head { margin-bottom: 26px; }
+.sec-head h2 {
+  margin: 0;
+  font-size: clamp(20px, 3.4vw, 26px);
+  letter-spacing: -0.015em;
+  font-weight: 700;
+}
+.sec-head p {
+  margin: 8px 0 0;
+  max-width: 62ch;
+  color: var(--mut);
+  font-size: 13px;
+}
+
+/* ===== como funciona ===== */
+
+.steps {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+.step {
+  position: relative;
+  padding: 20px 18px 18px;
+  border: 1px solid var(--line2);
+  border-radius: 14px;
+  background: linear-gradient(160deg, var(--panel), var(--bg2));
+  overflow: hidden;
+}
+.step::after {
+  content: attr(data-n);
+  position: absolute;
+  right: 10px;
+  bottom: -14px;
+  font-size: 66px;
+  font-weight: 800;
+  line-height: 1;
+  color: var(--acc);
+  opacity: 0.07;
+}
+.step h3 { margin: 0 0 6px; font-size: 13px; font-weight: 700; }
+.step p { margin: 0; font-size: 12.5px; color: var(--mut); }
+.step:first-child { grid-column: span 2; }
+@media (max-width: 720px) { .step:first-child { grid-column: span 1; } }
+
+/* ===== filtros ===== */
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+.chip {
+  min-height: 40px;
+  padding: 0 14px;
+  border: 1px solid var(--line2);
+  border-radius: 999px;
+  background: var(--bg2);
+  color: var(--mut);
+  font: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: color 150ms var(--ease), border-color 150ms var(--ease), background-color 150ms var(--ease);
+}
+.chip:hover { color: var(--txt); border-color: var(--line); }
+.chip[aria-pressed="true"] {
+  color: var(--acc);
+  border-color: rgba(212, 160, 23, 0.55);
+  background: rgba(212, 160, 23, 0.09);
+}
+.chip .count { color: var(--mut); font-weight: 400; margin-left: 6px; }
+
+/* ===== grade de mods ===== */
+
+.grid {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 18px;
+  border: 1px solid var(--line2);
+  border-radius: 14px;
+  background: var(--panel);
+  transition: transform 200ms var(--ease), border-color 200ms var(--ease), box-shadow 200ms var(--ease);
+}
+.card:hover {
+  transform: translateY(-3px);
+  border-color: var(--line);
+  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.45);
+}
+
+.card-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+.card h3 { margin: 0; font-size: 14.5px; font-weight: 700; letter-spacing: -0.01em; }
+.card .author { margin: 3px 0 0; font-size: 11px; color: var(--mut); }
+.card .desc { margin: 0; font-size: 12.5px; color: var(--mut); flex: 1; }
+
+.badge {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 9px;
+  border-radius: 8px;
+  border: 1px solid var(--line2);
+  background: var(--bg2);
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--mut);
+  white-space: nowrap;
+}
+.badge.ingame { color: var(--acc2); border-color: rgba(154, 184, 216, 0.3); }
+
+.card-foot {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  padding-top: 12px;
+  border-top: 1px solid var(--line2);
+}
+.tag {
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--mut);
+  opacity: 0.85;
+}
+.tag.sep::before { content: "/"; margin-right: 8px; opacity: 0.4; }
+
+.src {
+  margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 40px;
+  padding: 0 12px;
+  border: 1px solid var(--line2);
+  border-radius: 9px;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--mut);
+  text-decoration: none;
+  transition: color 150ms var(--ease), border-color 150ms var(--ease);
+}
+.src:hover, .src:focus-visible { color: var(--acc); border-color: rgba(212, 160, 23, 0.5); }
+.src code {
+  font-family: ui-monospace, "Cascadia Mono", Consolas, monospace;
+  font-size: 10.5px;
+  opacity: 0.75;
+}
+
+.state { padding: 40px 0; color: var(--mut); font-size: 13px; }
+
+/* ===== blocos de texto ===== */
+
+.note {
+  padding: 18px;
+  border: 1px solid var(--line2);
+  border-left: 2px solid var(--acc);
+  border-radius: 12px;
+  background: var(--bg2);
+}
+.note p { margin: 0; font-size: 12.5px; color: var(--mut); }
+.note p + p { margin-top: 8px; }
+.note code {
+  font-family: ui-monospace, "Cascadia Mono", Consolas, monospace;
+  font-size: 11.5px;
+  color: var(--txt);
+}
+
+/* ===== rodapé ===== */
+
+footer {
+  margin-top: 40px;
+  padding: 40px 0 56px;
+  border-top: 1px solid var(--line2);
+  background: var(--bg2);
+}
+footer h4 {
+  margin: 0 0 10px;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--mut);
+}
+footer .cols {
+  display: grid;
+  gap: 28px;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+}
+footer p { margin: 0 0 8px; font-size: 12px; color: var(--mut); max-width: 58ch; }
+footer a, .note a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 40px;
+  color: var(--mut);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  transition: color 150ms var(--ease);
+}
+.note a { color: var(--txt); }
+footer a:hover, footer a:focus-visible, .note a:hover, .note a:focus-visible { color: var(--acc); }
+footer .legal { margin-top: 28px; padding-top: 20px; border-top: 1px solid var(--line2); font-size: 11.5px; }
+
+/* ===== animações: entrada e saída, só transform/opacity ===== */
+
+@keyframes rise-in {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes fade-out {
+  from { opacity: 1; transform: none; }
+  to { opacity: 0; transform: translateY(-6px); }
+}
+
+.reveal { opacity: 0; }
+.reveal.in { animation: rise-in 420ms var(--ease) forwards; }
+
+.card { animation: rise-in 260ms var(--ease) backwards; }
+.grid.leaving { animation: fade-out 130ms var(--ease) forwards; }
+
+/* Troca de idioma: o conteúdo sai e volta, em vez de trocar em corte seco. */
+.swap { animation: rise-in 220ms var(--ease); }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+  .reveal { opacity: 1; }
+}
+
+@media (max-width: 640px) {
+  .top-inner { flex-wrap: wrap; gap: 8px; padding: 10px 0; }
+  .brand { width: 100%; margin-right: 0; }
+  nav.links { margin-right: auto; }
+  .hero { padding: 52px 0 36px; }
+  section { padding: 40px 0; }
+  .src { margin-left: 0; width: 100%; justify-content: center; }
+}
+
+:focus-visible { outline: 2px solid var(--acc); outline-offset: 2px; border-radius: 6px; }
+</style>
+</head>
+<body>
+<div class="shell">
+
+<header class="top">
+  <div class="wrap top-inner">
+    <a class="brand" href="#top">
+      <svg width="22" height="22" viewBox="0 0 32 32" aria-hidden="true">
+        <path d="M16 5 L25 21 H7 Z" fill="#d4a017"></path>
+        <circle cx="16" cy="25.5" r="2.6" fill="#d4a017"></circle>
+      </svg>
+      <span>Beacon <b>Store</b></span>
+    </a>
+    <nav class="links" aria-label="Beacon Store">
+      <a href="#mods" data-i="navMods">Mods</a>
+      <a href="#install" data-i="navInstall">Instalar</a>
+      <a href="#contribute" data-i="navContribute">Contribuir</a>
+    </nav>
+    <div class="langs" role="group" aria-label="Idioma / Language / Idioma">
+      <button type="button" data-lang="pt" aria-pressed="true">PT</button>
+      <button type="button" data-lang="en" aria-pressed="false">EN</button>
+      <button type="button" data-lang="es" aria-pressed="false">ES</button>
+    </div>
+  </div>
+</header>
+
+<main id="top">
+
+  <div class="wrap">
+    <section class="hero">
+      <p class="eyebrow" data-i="heroEyebrow">Diretório de mods</p>
+      <h1><span data-i="heroTitleA">Mods para o</span> <em>Beacon</em></h1>
+      <p class="lead" data-i="heroLead"></p>
+      <div class="hero-meta">
+        <span class="pill"><span class="dot"></span><b id="modCount">0</b> <span data-i="pillMods">mods listados</span></span>
+        <span class="pill" data-i="pillPinned">Commit fixado por mod</span>
+        <span class="pill" data-i="pillNoHost">Nenhum binário hospedado aqui</span>
+      </div>
+    </section>
+
+    <section id="how" class="reveal">
+      <div class="sec-head">
+        <h2 data-i="howTitle">Como funciona</h2>
+        <p data-i="howLead"></p>
+      </div>
+      <div class="steps">
+        <article class="step" data-n="1">
+          <h3 data-i="s1t"></h3>
+          <p data-i="s1d"></p>
+        </article>
+        <article class="step" data-n="2">
+          <h3 data-i="s2t"></h3>
+          <p data-i="s2d"></p>
+        </article>
+        <article class="step" data-n="3">
+          <h3 data-i="s3t"></h3>
+          <p data-i="s3d"></p>
+        </article>
+        <article class="step" data-n="4">
+          <h3 data-i="s4t"></h3>
+          <p data-i="s4d"></p>
+        </article>
+      </div>
+    </section>
+
+    <section id="mods" class="reveal">
+      <div class="sec-head">
+        <h2 data-i="modsTitle">Mods</h2>
+        <p data-i="modsLead"></p>
+      </div>
+      <div class="filters" id="filters" role="group" aria-label="Categorias"></div>
+      <div class="grid" id="grid" aria-live="polite"></div>
+      <p class="state" id="state" data-i="loading">Carregando catálogo...</p>
+    </section>
+
+    <section id="install" class="reveal">
+      <div class="sec-head">
+        <h2 data-i="installTitle">Instalar</h2>
+      </div>
+      <div class="note">
+        <p data-i="installP1"></p>
+        <p data-i="installP2"></p>
+      </div>
+    </section>
+
+    <section id="contribute" class="reveal">
+      <div class="sec-head">
+        <h2 data-i="contribTitle">Contribuir</h2>
+        <p data-i="contribLead"></p>
+      </div>
+      <div class="note">
+        <p data-i="contribP1"></p>
+        <p>
+          <a href="https://github.com/iurysenck/tbh-beacon-store/blob/master/CONTRIBUTING.md">CONTRIBUTING.md</a>
+          &nbsp;<span class="tag sep"></span>&nbsp;
+          <a href="https://github.com/iurysenck/tbh-beacon-store/blob/master/schema/manifest.schema.json">manifest.schema.json</a>
+        </p>
+      </div>
+    </section>
+  </div>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="cols">
+      <div>
+        <h4 data-i="footPrivacy">Privacidade</h4>
+        <p data-i="privacyP1"></p>
+        <p data-i="privacyP2"></p>
+      </div>
+      <div>
+        <h4 data-i="footLinks">Links</h4>
+        <p><a href="https://github.com/iurysenck/tbh-beacon-store">tbh-beacon-store</a></p>
+        <p><a href="https://github.com/iurysenck/tbh-beacon-modkit">tbh-beacon-modkit</a></p>
+        <p><a href="https://github.com/iurysenck/tbh-beacon-store/blob/master/LICENSE">AGPL-3.0-only</a></p>
+      </div>
+    </div>
+    <div class="legal">
+      <p data-i="disc1"></p>
+      <p data-i="disc2"></p>
+      <p data-i="disc3"></p>
+      <p><a href="https://taskbarhero.wiki/privacy" data-i="disc4"></a></p>
+    </div>
+  </div>
+</footer>
+
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  // Regra trilingue do projeto: cada texto da pagina existe em pt/en/es. O catalogo ja traz a
+  // descricao de cada mod nos tres idiomas (o schema exige), entao trocar de idioma nao dispara
+  // nenhuma requisicao nova.
+  var I18N = {
+    pt: {
+      navMods: "Mods", navInstall: "Instalar", navContribute: "Contribuir",
+      heroEyebrow: "Diretório de mods", heroTitleA: "Mods para o",
+      heroLead: "Cada mod aqui é um manifesto que aponta para um commit exato no repositório do próprio autor. Este repositório não guarda código nem binário de mod: ele indexa, e a integração verifica.",
+      pillMods: "mods listados", pillPinned: "Commit fixado por mod", pillNoHost: "Nenhum binário hospedado aqui",
+      howTitle: "Como funciona",
+      howLead: "O caminho de um mod até esta lista, do envio à verificação.",
+      s1t: "Manifesto, não binário",
+      s1d: "O autor abre um pull request com um único JSON que descreve o mod e aponta o commit de origem. Nenhuma DLL entra neste repositório.",
+      s2t: "Validação automática",
+      s2d: "A integração confere o formato do manifesto contra o schema a cada alteração.",
+      s3t: "Revisão humana",
+      s3d: "Alguém lê o código naquele commit exato antes de aprovar. Commit fixado, nunca branch: um ponteiro móvel deixaria o código mudar depois da revisão.",
+      s4t: "Compilado da fonte",
+      s4d: "A compilação parte do mesmo commit revisado e gera o hash do resultado, para conferir que o arquivo entregue é o que foi lido.",
+      modsTitle: "Mods",
+      modsLead: "As descrições vêm direto dos manifestos, sem cópia paralela: a loja dentro do Beacon lê exatamente estes mesmos arquivos.",
+      loading: "Carregando catálogo...",
+      failed: "Não foi possível carregar o catálogo. Recarregue a página.",
+      empty: "Nenhum mod nesta categoria.",
+      all: "Todos",
+      catAutomation: "Automação", catLiveData: "Dados ao vivo", catUiCard: "Card de interface", catOther: "Outros",
+      inGame: "Roda no jogo", beaconSide: "Só no Beacon",
+      source: "Ver fonte",
+      installTitle: "Instalar",
+      installP1: "A instalação com um clique ainda não está no ar. Falta um passo do lado da loja: a compilação a partir do commit fixado precisa de uma máquina com o jogo e o BepInEx já instalados, e enquanto ela não existe não há arquivo verificado para oferecer.",
+      installP2: "Por enquanto o Beacon mostra estes mesmos mods na loja interna, com os requisitos de cada um, e a instalação é feita à mão. Um botão que parece funcionar e não funciona seria pior que um botão honestamente desligado.",
+      contribTitle: "Contribuir",
+      contribLead: "Enviar um mod é enviar um arquivo.",
+      contribP1: "Crie mods/<id>.json seguindo o schema, aponte o commit exato que você quer que seja revisado e abra um pull request. A descrição precisa vir em português, inglês e espanhol: é texto que o usuário final lê, aqui e dentro do app.",
+      footPrivacy: "Privacidade", footLinks: "Links",
+      privacyP1: "Esta página é estática. Não tem servidor próprio, não usa analytics, não carrega nada de terceiros e não cria cookie nenhum.",
+      privacyP2: "A única coisa guardada é a sua escolha de idioma, no armazenamento local do seu próprio navegador. Ela nunca sai do seu dispositivo e some quando você limpa os dados do site.",
+      disc1: "Beacon é um aplicativo companion não oficial, sem vínculo com os desenvolvedores do jogo.",
+      disc2: "Task Bar Hero, seus nomes, marcas e assets pertencem a TesseractStudio / Nugem Studio.",
+      disc3: "Este projeto não redistribui assets do jogo: eles são lidos da sua própria instalação.",
+      disc4: "Política de privacidade do jogo: taskbarhero.wiki/privacy"
+    },
+    en: {
+      navMods: "Mods", navInstall: "Install", navContribute: "Contribute",
+      heroEyebrow: "Mod directory", heroTitleA: "Mods for",
+      heroLead: "Every mod here is a manifest pointing at one exact commit in its author's own repository. This repository stores no mod code and no mod binaries: it indexes, and the pipeline verifies.",
+      pillMods: "mods listed", pillPinned: "One pinned commit per mod", pillNoHost: "No binaries hosted here",
+      howTitle: "How it works",
+      howLead: "A mod's path onto this list, from submission to verification.",
+      s1t: "A manifest, not a binary",
+      s1d: "The author opens a pull request with a single JSON describing the mod and pointing at its source commit. No DLL ever lands in this repository.",
+      s2t: "Automatic validation",
+      s2d: "The pipeline checks the manifest's shape against the schema on every change.",
+      s3t: "Human review",
+      s3d: "Someone reads the code at that exact commit before approving. A pinned commit, never a branch: a moving pointer would let the code change after review.",
+      s4t: "Built from source",
+      s4d: "The build starts from the same reviewed commit and hashes the result, so the file you get can be checked against the one that was read.",
+      modsTitle: "Mods",
+      modsLead: "Descriptions come straight from the manifests, with no parallel copy: the store inside Beacon reads these very same files.",
+      loading: "Loading catalog...",
+      failed: "The catalog could not be loaded. Please reload the page.",
+      empty: "No mods in this category.",
+      all: "All",
+      catAutomation: "Automation", catLiveData: "Live data", catUiCard: "Interface card", catOther: "Other",
+      inGame: "Runs in game", beaconSide: "Beacon only",
+      source: "View source",
+      installTitle: "Install",
+      installP1: "One click install is not live yet. A step is still missing on the store side: building from the pinned commit needs a machine with the game and BepInEx already installed, and until that exists there is no verified file to offer.",
+      installP2: "For now Beacon lists these same mods in its built in store, along with each one's requirements, and installation is done by hand. A button that looks like it works and does not would be worse than a button that is honestly switched off.",
+      contribTitle: "Contribute",
+      contribLead: "Submitting a mod means submitting a file.",
+      contribP1: "Create mods/<id>.json following the schema, point at the exact commit you want reviewed, and open a pull request. The description must come in Portuguese, English and Spanish: it is text end users read, both here and inside the app.",
+      footPrivacy: "Privacy", footLinks: "Links",
+      privacyP1: "This page is static. It has no backend of its own, runs no analytics, loads nothing from third parties and sets no cookies.",
+      privacyP2: "The only thing stored is your language choice, in your own browser's local storage. It never leaves your device and disappears when you clear this site's data.",
+      disc1: "Beacon is an unofficial companion app, not affiliated with the game's developers.",
+      disc2: "Task Bar Hero, its names, trademarks and assets belong to TesseractStudio / Nugem Studio.",
+      disc3: "This project does not redistribute game assets: they are read from your own installation.",
+      disc4: "Game privacy policy: taskbarhero.wiki/privacy"
+    },
+    es: {
+      navMods: "Mods", navInstall: "Instalar", navContribute: "Contribuir",
+      heroEyebrow: "Directorio de mods", heroTitleA: "Mods para",
+      heroLead: "Cada mod aquí es un manifiesto que apunta a un commit exacto en el repositorio de su propio autor. Este repositorio no guarda código ni binarios de mods: indexa, y la integración verifica.",
+      pillMods: "mods listados", pillPinned: "Un commit fijado por mod", pillNoHost: "Ningún binario alojado aquí",
+      howTitle: "Cómo funciona",
+      howLead: "El camino de un mod hasta esta lista, desde el envío hasta la verificación.",
+      s1t: "Un manifiesto, no un binario",
+      s1d: "El autor abre un pull request con un único JSON que describe el mod y apunta a su commit de origen. Ningún DLL entra en este repositorio.",
+      s2t: "Validación automática",
+      s2d: "La integración comprueba el formato del manifiesto contra el schema en cada cambio.",
+      s3t: "Revisión humana",
+      s3d: "Alguien lee el código en ese commit exacto antes de aprobarlo. Commit fijado, nunca una rama: un puntero móvil permitiría que el código cambiara después de la revisión.",
+      s4t: "Compilado desde la fuente",
+      s4d: "La compilación parte del mismo commit revisado y genera el hash del resultado, para comprobar que el archivo entregado es el que se leyó.",
+      modsTitle: "Mods",
+      modsLead: "Las descripciones vienen directamente de los manifiestos, sin copia paralela: la tienda dentro de Beacon lee exactamente estos mismos archivos.",
+      loading: "Cargando catálogo...",
+      failed: "No se pudo cargar el catálogo. Recarga la página.",
+      empty: "No hay mods en esta categoría.",
+      all: "Todos",
+      catAutomation: "Automatización", catLiveData: "Datos en vivo", catUiCard: "Tarjeta de interfaz", catOther: "Otros",
+      inGame: "Se ejecuta en el juego", beaconSide: "Solo en Beacon",
+      source: "Ver fuente",
+      installTitle: "Instalar",
+      installP1: "La instalación con un clic aún no está activa. Falta un paso del lado de la tienda: compilar desde el commit fijado necesita una máquina con el juego y BepInEx ya instalados, y mientras no exista no hay archivo verificado que ofrecer.",
+      installP2: "Por ahora Beacon muestra estos mismos mods en su tienda interna, con los requisitos de cada uno, y la instalación se hace a mano. Un botón que parece funcionar y no funciona sería peor que un botón honestamente apagado.",
+      contribTitle: "Contribuir",
+      contribLead: "Enviar un mod es enviar un archivo.",
+      contribP1: "Crea mods/<id>.json siguiendo el schema, apunta al commit exacto que quieres que se revise y abre un pull request. La descripción debe venir en portugués, inglés y español: es texto que lee el usuario final, aquí y dentro de la app.",
+      footPrivacy: "Privacidad", footLinks: "Enlaces",
+      privacyP1: "Esta página es estática. No tiene servidor propio, no usa analytics, no carga nada de terceros y no crea ninguna cookie.",
+      privacyP2: "Lo único que se guarda es tu elección de idioma, en el almacenamiento local de tu propio navegador. Nunca sale de tu dispositivo y desaparece cuando borras los datos del sitio.",
+      disc1: "Beacon es una aplicación companion no oficial, sin vínculo con los desarrolladores del juego.",
+      disc2: "Task Bar Hero, sus nombres, marcas y assets pertenecen a TesseractStudio / Nugem Studio.",
+      disc3: "Este proyecto no redistribuye assets del juego: se leen de tu propia instalación.",
+      disc4: "Política de privacidad del juego: taskbarhero.wiki/privacy"
+    }
+  };
+
+  var CAT_KEY = {
+    "automation": "catAutomation",
+    "live-data": "catLiveData",
+    "ui-card": "catUiCard",
+    "other": "catOther"
+  };
+
+  var LANG_STORE = "beaconStoreLang";
+  var mods = [];
+  var filter = "all";
+  var lang = pickLang();
+
+  function pickLang() {
+    var saved = null;
+    try { saved = localStorage.getItem(LANG_STORE); } catch (e) { saved = null; }
+    if (saved && I18N[saved]) return saved;
+    var nav = (navigator.language || "en").slice(0, 2).toLowerCase();
+    return I18N[nav] ? nav : "en";
+  }
+
+  function t(key) {
+    return (I18N[lang] && I18N[lang][key]) || I18N.en[key] || "";
+  }
+
+  function applyStaticText() {
+    document.documentElement.lang = lang;
+    var nodes = document.querySelectorAll("[data-i]");
+    for (var i = 0; i < nodes.length; i++) {
+      var key = nodes[i].getAttribute("data-i");
+      if (I18N[lang][key] !== undefined) nodes[i].textContent = I18N[lang][key];
+    }
+    var buttons = document.querySelectorAll(".langs button");
+    for (var j = 0; j < buttons.length; j++) {
+      buttons[j].setAttribute("aria-pressed", String(buttons[j].getAttribute("data-lang") === lang));
+    }
+  }
+
+  // O catalogo e conteudo enviado por terceiros via pull request. Mesmo passando por revisao
+  // humana, ele nunca entra no DOM como markup: tudo que vem do JSON sai escapado.
+  function esc(s) {
+    return String(s).replace(/[&<>"]/g, function (c) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c];
+    });
+  }
+
+  // Idem para o href do link de fonte: so http(s), nunca um javascript: vindo do manifesto.
+  function safeUrl(u) {
+    var s = String(u || "");
+    return /^https?:\/\//i.test(s) ? s : "";
+  }
+
+  function renderFilters() {
+    var box = document.getElementById("filters");
+    var counts = { all: mods.length };
+    for (var i = 0; i < mods.length; i++) {
+      var c = mods[i].category || "other";
+      counts[c] = (counts[c] || 0) + 1;
+    }
+    var order = ["all", "automation", "live-data", "ui-card", "other"];
+    var html = "";
+    for (var k = 0; k < order.length; k++) {
+      var key = order[k];
+      if (!counts[key]) continue;
+      var label = key === "all" ? t("all") : t(CAT_KEY[key]);
+      html += '<button type="button" class="chip" data-cat="' + key + '" aria-pressed="' +
+        (filter === key) + '">' + esc(label) +
+        '<span class="count">' + counts[key] + "</span></button>";
+    }
+    box.innerHTML = html;
+  }
+
+  function cardHtml(mod, index) {
+    var desc = (mod.description && (mod.description[lang] || mod.description.en)) || "";
+    var catLabel = t(CAT_KEY[mod.category] || "catOther");
+    var kind = mod.injectable ? t("inGame") : t("beaconSide");
+    var commit = /^[0-9a-f]{40}$/.test(String(mod.pinnedCommit || "")) ? mod.pinnedCommit : "";
+    var repo = safeUrl(mod.homepage || mod.repoUrl);
+    var link = repo && commit ? repo.replace(/\/$/, "") + "/tree/" + commit : repo;
+    return '' +
+      '<article class="card" style="animation-delay:' + Math.min(index * 40, 320) + 'ms">' +
+        '<div class="card-top">' +
+          "<div>" +
+            "<h3>" + esc(mod.name || mod.id) + "</h3>" +
+            '<p class="author">' + esc(mod.author || "") + "</p>" +
+          "</div>" +
+          '<span class="badge' + (mod.injectable ? " ingame" : "") + '">' + esc(kind) + "</span>" +
+        "</div>" +
+        '<p class="desc">' + esc(desc) + "</p>" +
+        '<div class="card-foot">' +
+          '<span class="tag">' + esc(catLabel) + "</span>" +
+          '<span class="tag sep">' + esc(mod.license || "") + "</span>" +
+          (link
+            ? '<a class="src" href="' + esc(link) + '" rel="noopener noreferrer">' +
+                esc(t("source")) +
+                (commit ? " <code>" + esc(commit.slice(0, 7)) + "</code>" : "") +
+              "</a>"
+            : "") +
+        "</div>" +
+      "</article>";
+  }
+
+  function renderGrid() {
+    var grid = document.getElementById("grid");
+    var state = document.getElementById("state");
+    var list = filter === "all"
+      ? mods
+      : mods.filter(function (m) { return (m.category || "other") === filter; });
+
+    if (!list.length) {
+      grid.innerHTML = "";
+      state.textContent = t("empty");
+      state.style.display = "";
+      return;
+    }
+    state.style.display = "none";
+    grid.innerHTML = list.map(cardHtml).join("");
+  }
+
+  // Troca de filtro com saida E entrada, nao um corte seco: a grade some, e so entao a lista
+  // nova entra. A regra de animacao do projeto pede as duas pontas, nao so a entrada.
+  function switchFilter(next) {
+    if (next === filter) return;
+    filter = next;
+    var grid = document.getElementById("grid");
+    var chips = document.querySelectorAll(".chip");
+    for (var i = 0; i < chips.length; i++) {
+      chips[i].setAttribute("aria-pressed", String(chips[i].getAttribute("data-cat") === filter));
+    }
+    grid.classList.add("leaving");
+    window.setTimeout(function () {
+      grid.classList.remove("leaving");
+      renderGrid();
+    }, 130);
+  }
+
+  function setLang(next) {
+    if (next === lang || !I18N[next]) return;
+    lang = next;
+    try { localStorage.setItem(LANG_STORE, next); } catch (e) { /* modo privado: segue sem guardar */ }
+    applyStaticText();
+    renderFilters();
+    renderGrid();
+    var main = document.querySelector("main");
+    main.classList.remove("swap");
+    void main.offsetWidth;
+    main.classList.add("swap");
+  }
+
+  document.querySelector(".langs").addEventListener("click", function (ev) {
+    var btn = ev.target.closest("button[data-lang]");
+    if (btn) setLang(btn.getAttribute("data-lang"));
+  });
+
+  document.getElementById("filters").addEventListener("click", function (ev) {
+    var btn = ev.target.closest(".chip");
+    if (btn) switchFilter(btn.getAttribute("data-cat"));
+  });
+
+  // Secoes entram conforme aparecem na tela, uma vez cada.
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      if (e.isIntersecting) {
+        e.target.classList.add("in");
+        io.unobserve(e.target);
+      }
+    });
+  }, { rootMargin: "0px 0px -8% 0px" });
+  document.querySelectorAll(".reveal").forEach(function (el) { io.observe(el); });
+
+  applyStaticText();
+
+  fetch("catalog.json", { cache: "no-cache" })
+    .then(function (r) {
+      if (!r.ok) throw new Error("HTTP " + r.status);
+      return r.json();
+    })
+    .then(function (data) {
+      mods = (data && data.mods) || [];
+      mods.sort(function (a, b) { return String(a.name).localeCompare(String(b.name)); });
+      document.getElementById("modCount").textContent = String(mods.length);
+      renderFilters();
+      renderGrid();
+    })
+    .catch(function () {
+      document.getElementById("state").textContent = t("failed");
+    });
+})();
+</script>
+</body>
+</html>
