@@ -41,5 +41,5 @@ This repository stores manifests only. It collects no data, sets no cookies and 
 
 ## License
 
-AGPL-3.0-only — see [LICENSE](LICENSE). Note this covers the manifests/schema/CI in *this* repo;
+AGPL-3.0-only, see [LICENSE](LICENSE). Note this covers the manifests/schema/CI in *this* repo;
 each listed mod carries its own license (see its `license` field).
