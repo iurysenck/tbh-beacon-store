@@ -1,13 +1,31 @@
-# Rebuilds every mod straight from its pinned commit and hashes the result -- see
-# scripts/build_from_source.py's docstring for why this step exists at all.
+# Rebuilds every mod straight from its pinned commit and hashes the result, so what someone
+# installs can be checked against what a maintainer actually read. See scripts/build_from_source.py.
 #
-# runs-on: self-hosted, NOT ubuntu-latest. Every mod's .csproj references the game's own
-# BepInEx/interop/*.dll (Assembly-CSharp.dll, UnityEngine.*.dll, ...) as build-time dependencies --
-# proprietary game binaries that can't be checked into this repo or fetched by a GitHub-hosted
-# runner. This job only works on a runner that already has TaskBar Hero + BepInEx installed
-# locally (the maintainer's own machine, registered as a self-hosted runner). Until one is
-# registered, run scripts/build_from_source.py locally instead and attach the resulting
-# dist/<id>/<assemblyName> + printed hash to the release by hand.
+# ============================ READ THIS BEFORE EDITING THE TRIGGERS ============================
+#
+# This job runs on a SELF-HOSTED runner, on a machine that belongs to a person, because every mod's
+# .csproj references the game's own BepInEx/interop DLLs. Those are proprietary binaries that cannot
+# be committed here or fetched by a GitHub-hosted runner.
+#
+# This repository is PUBLIC. GitHub's own guidance is to avoid self-hosted runners on public
+# repositories, for one reason: anyone can fork a public repo and open a pull request, and if a
+# workflow runs that pull request's code on your runner, they have just run code on your machine.
+#
+# Two rules keep that from happening here, and neither is optional:
+#
+#   1. NEVER add pull_request or pull_request_target to the triggers below. The push trigger only
+#      fires after a maintainer has already reviewed and merged. If you ever need a check on pull
+#      requests, it belongs in validate.yml, which runs on a GitHub-hosted runner and only reads
+#      JSON.
+#   2. The environment below gates the job behind a manual approval. Even a merged change waits for
+#      a human to press approve before anything executes on the runner. Set that environment up with
+#      a required reviewer, or the gate does nothing: see docs/self-hosted-runner.md.
+#
+# What this job executes is, by design, third-party code: it builds each mod from the commit its
+# manifest pins. Reviewing that commit before merging is the real security boundary. The approval
+# gate is the second chance to say no.
+#
+# ==============================================================================================
 name: Build from source
 
 on:
@@ -17,12 +35,44 @@ on:
     paths:
       - "mods/**"
 
+# Least privilege: this job reads the repo and publishes an artifact. It has no business writing to
+# the repository, to packages, or to anything else. Without this block the token carries whatever
+# the repository default is, which is broader than what is needed here.
+permissions:
+  contents: read
+
+# One build at a time on a single physical machine. Two concurrent runs would fight over the same
+# game install and the same output directory, and the result of both would be untrustworthy.
+concurrency:
+  group: build-from-source
+  cancel-in-progress: false
+
 jobs:
   build:
     runs-on: self-hosted
+    # Manual approval gate. Create this environment in the repository settings and add yourself as a
+    # required reviewer; see docs/self-hosted-runner.md. If the environment does not exist or has no
+    # reviewer, the job runs unattended, which defeats the purpose.
+    environment: mod-build
+    timeout-minutes: 30
     steps:
+      # A self-hosted runner keeps its working directory between jobs. Without this, files left by a
+      # previous run stay around and can end up inside the next build, or be mistaken for its
+      # output. A GitHub-hosted runner starts clean every time; this one does not.
+      - name: Wipe the workspace before checking out
+        run: |
+          git clean -ffdx || true
+          git reset --hard || true
+        continue-on-error: true
+
       - uses: actions/checkout@v4
+        with:
+          # No credentials left behind in .git/config after the job. On a shared, long-lived machine
+          # a persisted token is a credential sitting on disk for whatever runs next.
+          persist-credentials: false
+
       - run: python scripts/build_from_source.py
+
       - uses: actions/upload-artifact@v4
         with:
           name: mod-builds

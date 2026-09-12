@@ -23,7 +23,9 @@ this repository never disagree. `catalog.yml` regenerates it on every manifest c
 5. The built DLL + hash get published, so anyone installing it can verify what they got matches
    what was reviewed.
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) for the full submission process.
+See [CONTRIBUTING.md](CONTRIBUTING.md) for the full submission process, and
+[docs/self-hosted-runner.md](docs/self-hosted-runner.md) if you are setting up the build
+machine that step 4 needs.
 
 ## Disclaimer
 
